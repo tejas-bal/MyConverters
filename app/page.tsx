@@ -7,6 +7,7 @@ export default function Home() {
   const [usd, setUsd] = useState<number>(1);
   const [gbpRate, setGbpRate] = useState<number | null>(null);
   const [inrRate, setInrRate] = useState<number | null>(null);
+  const [eurRate, setEurRate] = useState<number | null>(null);
   const [bgImage, setBgImage] = useState<string>("");
   const [loading, setLoading] = useState(true);
 
@@ -17,6 +18,7 @@ export default function Home() {
       const rates = res.data.conversion_rates;
       setGbpRate(rates.GBP);
       setInrRate(rates.INR);
+      setEurRate(rates.EUR);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching rates", error);
@@ -93,6 +95,16 @@ export default function Home() {
               {inrRate !== null ? (usd * inrRate).toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) : "-"}
             </div>
           </div>
+          {/* EUR Row */}
+          <div style={styles.gridRow}>
+            <div style={styles.flagCell}>
+              <img src="/flags/eu.png" alt="EUR" style={styles.flag} />
+            </div>
+            <div style={styles.labelCell}>USD ($) → Euro (€)</div>
+            <div style={styles.valueCell}>
+              {eurRate !== null ? (usd * eurRate).toLocaleString('en-EU', { style: 'currency', currency: 'EUR' }) : "-"}
+            </div>
+          </div>
         </div>
       </div>
     </main>
@@ -103,8 +115,7 @@ const styles: any = {
   container: {
     width: "100vw",
     height: "100vh",
-    position: "relative",
-    fontFamily: "Arial, sans-serif",
+    position: "relative"
   },
   background: {
     position: "absolute",
