@@ -79,7 +79,7 @@ export default function Home() {
             <div style={styles.flagCell}>
               <img src="/flags/gb.png" alt="GBP" style={styles.flag} />
             </div>
-            <div style={styles.labelCell}>British Pound (£)</div>
+            <div style={styles.labelCell}>British Pound</div>
             <div style={styles.valueCell}>
               {gbpRate !== null ? (usd * gbpRate).toLocaleString('en-GB', { style: 'currency', currency: 'GBP' }) : "-"}
             </div>
@@ -90,7 +90,7 @@ export default function Home() {
             <div style={styles.flagCell}>
               <img src="/flags/in.png" alt="INR" style={styles.flag} />
             </div>
-            <div style={styles.labelCell}>Indian Rupee (₹)</div>
+            <div style={styles.labelCell}>Indian Rupee</div>
             <div style={styles.valueCell}>
               {inrRate !== null ? (usd * inrRate).toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) : "-"}
             </div>
@@ -100,7 +100,7 @@ export default function Home() {
             <div style={styles.flagCell}>
               <img src="/flags/eu.png" alt="EUR" style={styles.flag} />
             </div>
-            <div style={styles.labelCell}>Euro (€)</div>
+            <div style={styles.labelCell}>Euro</div>
             <div style={styles.valueCell}>
               {eurRate !== null ? (usd * eurRate).toLocaleString('en-EU', { style: 'currency', currency: 'EUR' }) : "-"}
             </div>
