@@ -42,7 +42,7 @@ export default function Home() {
     const interval = setInterval(() => {
       fetchRates();
       fetchBackground();
-    }, 10000); // refresh every 10s
+    }, 100000); // refresh every 10s
 
     return () => clearInterval(interval);
   }, []);
