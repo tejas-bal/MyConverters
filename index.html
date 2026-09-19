@@ -413,7 +413,7 @@
     <div class="field-group" style="margin-bottom:0">
       <label>From</label>
       <div class="select-wrap">
-        <span class="sym-badge" id="fromSymBadge">$</span>
+        <span class="sym-badge" id="fromSymBadge">£</span>
         <select id="fromCurrency"></select>
       </div>
     </div>
@@ -423,7 +423,7 @@
     <div class="field-group" style="margin-bottom:0">
       <label>To</label>
       <div class="select-wrap">
-        <span class="sym-badge" id="toSymBadge">€</span>
+        <span class="sym-badge" id="toSymBadge">$</span>
         <select id="toCurrency"></select>
       </div>
     </div>
@@ -435,9 +435,9 @@
 
   <div class="result-box" id="resultBox">
     <div class="result-chips">
-      <span class="result-from-sym" id="resultFromSym">$</span>
+      <span class="result-from-sym" id="resultFromSym">£</span>
       <span class="result-arrow">→</span>
-      <span class="result-to-sym" id="resultToSym">€</span>
+      <span class="result-to-sym" id="resultToSym">$</span>
     </div>
     <div class="result-amount" id="resultAmount">—</div>
     <div class="result-label" id="resultLabel"></div>
@@ -580,8 +580,8 @@
     });
   });
 
-  fromSel.value = 'USD';
-  toSel.value   = 'EUR';
+  fromSel.value = 'GBP';
+  toSel.value   = 'USD';
   updateBadges();
 
   // Fetch rates
