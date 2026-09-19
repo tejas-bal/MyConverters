@@ -147,27 +147,6 @@
     input[type="number"]::placeholder { color: var(--text-light); }
     select option { background: #fff; color: var(--text-dark); }
 
-    .convert-btn {
-      width: 100%;
-      padding: 12px;
-      border-radius: 50px;
-      border: none;
-      background: var(--green-dk);
-      color: #fff;
-      font-size: 14px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      margin-top: 4px;
-      letter-spacing: 0.3px;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 4px 16px rgba(30,92,52,0.25);
-    }
-
-    .convert-btn:hover { background: var(--green-md); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(30,92,52,0.30); }
-    .convert-btn:active { transform: translateY(0); }
-    .convert-btn:disabled { background: #b0c4b5; cursor: not-allowed; transform: none; box-shadow: none; }
-
     .result-box {
       margin-top: 16px;
       padding: 16px 20px;
@@ -314,8 +293,6 @@
     </div>
   </div>
 
-  <button class="convert-btn" id="convertBtn" disabled>✦ Convert</button>
-
   <div class="error-msg" id="errorMsg"></div>
 
   <div class="result-box" id="resultBox">
@@ -367,8 +344,9 @@
   const BASE_CURRENCY = 'GBP';
   const TARGET_CURRENCIES = ['USD', 'INR'];
 
+  let ratesLoaded = false;
+
   const amountEl = document.getElementById('amount');
-  const convertBtn = document.getElementById('convertBtn');
   const resultBox  = document.getElementById('resultBox');
   const errorMsg     = document.getElementById('errorMsg');
   const statusDot    = document.getElementById('statusDot');
@@ -389,7 +367,7 @@
       ratesTimestamp = data.time_last_update_utc;
       statusDot.className = 'status-dot';
       statusText.textContent = 'Live rates loaded';
-      convertBtn.disabled = false;
+      ratesLoaded = true;
       const d = new Date(ratesTimestamp);
       timestampEl.textContent = `Rates updated: ${d.toUTCString()}`;
       // Auto-convert
@@ -444,13 +422,8 @@
     resultBox.classList.add('visible');
   }
 
-  convertBtn.addEventListener('click', doConvert);
-
   // Auto-convert on input change
-  amountEl.addEventListener('input', () => { if (!convertBtn.disabled) doConvert(); });
-
-  // Enter key
-  amountEl.addEventListener('keydown', e => { if (e.key === 'Enter' && !convertBtn.disabled) doConvert(); });
+  amountEl.addEventListener('input', () => { if (ratesLoaded) doConvert(); });
 
   fetchRates();
 </script>
