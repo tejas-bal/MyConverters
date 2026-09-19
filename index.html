@@ -28,10 +28,7 @@
     body {
       font-family: 'Google Sans Text', 'Google Sans', 'Segoe UI', system-ui, sans-serif;
       min-height: 100vh;
-      background-color: #f7c9dd;
-      background-image:
-        radial-gradient(ellipse at 10% 20%, rgba(52,168,83,0.07) 0%, transparent 55%),
-        radial-gradient(ellipse at 90% 80%, rgba(180,150,100,0.10) 0%, transparent 55%);
+      background-color: #e0e0e0;
       display: flex;
       align-items: flex-start;
       justify-content: center;
@@ -231,28 +228,6 @@
       margin-top: 12px;
     }
 
-    /* Floating symbols background */
-    .bg-symbols {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 0;
-    }
-    .bg-sym {
-      position: absolute;
-      font-size: 28px;
-      opacity: 0.07;
-      animation: floatUp linear infinite;
-      user-select: none;
-    }
-    @keyframes floatUp {
-      0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-      10%  { opacity: 0.07; }
-      90%  { opacity: 0.07; }
-      100% { transform: translateY(-10vh) rotate(25deg); opacity: 0; }
-    }
-
     .card { position: relative; z-index: 1; }
 
     /* Symbol badge next to select */
@@ -305,9 +280,6 @@
   </style>
 </head>
 <body>
-
-<!-- Floating background symbols -->
-<div class="bg-symbols" id="bgSymbols"></div>
 
 <div class="card">
   <div class="header">
@@ -370,20 +342,6 @@
     KES:"KSh", GHS:"₵", CLP:"CL$", COP:"CO$", PEN:"S/", ILS:"₪",
     QAR:"﷼", KWD:"KD", BHD:"BD", OMR:"﷼", RON:"lei", UAH:"₴"
   };
-
-  // Floating background symbols
-  const bgSyms = document.getElementById('bgSymbols');
-  const allSyms = Object.values(SYMBOLS);
-  for (let i = 0; i < 22; i++) {
-    const el = document.createElement('div');
-    el.className = 'bg-sym';
-    el.textContent = allSyms[Math.floor(Math.random() * allSyms.length)];
-    el.style.left = (Math.random() * 100) + '%';
-    el.style.animationDuration = (14 + Math.random() * 18) + 's';
-    el.style.animationDelay = (-Math.random() * 20) + 's';
-    el.style.fontSize = (18 + Math.random() * 24) + 'px';
-    bgSyms.appendChild(el);
-  }
 
   let rates = {};
   let ratesBase = "USD";
