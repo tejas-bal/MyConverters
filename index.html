@@ -147,6 +147,33 @@
     input[type="number"]::placeholder { color: var(--text-light); }
     select option { background: #fff; color: var(--text-dark); }
 
+    .currency-tabs {
+      display: flex;
+      gap: 6px;
+    }
+
+    .currency-tab {
+      flex: 1;
+      padding: 9px 0;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--cream);
+      color: var(--text-dark);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .currency-tab:hover:not(.active) { border-color: var(--green-md); }
+
+    .currency-tab.active {
+      background: var(--green-dk);
+      color: #fff;
+      border-color: var(--green-dk);
+    }
+
     .result-box {
       margin-top: 16px;
       padding: 16px 12px;
@@ -293,11 +320,17 @@
     <span id="statusText">Fetching live rates…</span>
   </div>
 
-  <!-- Amount Input (GBP) -->
+  <!-- Base currency switcher -->
   <div class="field-group">
-    <label>Amount (GBP)</label>
+    <label>Convert From</label>
+    <div class="currency-tabs" id="currencyTabs"></div>
+  </div>
+
+  <!-- Amount Input -->
+  <div class="field-group">
+    <label id="amountLabel">Amount (GBP)</label>
     <div class="select-wrap">
-      <span class="sym-badge">£</span>
+      <span class="sym-badge" id="amountSymBadge">£</span>
       <input type="number" id="amount" placeholder="Enter amount" value="1" min="0" step="any" />
     </div>
   </div>
@@ -305,16 +338,16 @@
   <div class="error-msg" id="errorMsg"></div>
 
   <div class="result-box" id="resultBox">
-    <div class="result-row" id="resultRowUSD">
-      <span class="result-sym">$</span>
-      <div class="result-amount" id="resultAmountUSD">—</div>
-      <div class="rate-info" id="rateInfoUSD"></div>
+    <div class="result-row" id="resultSlot0">
+      <span class="result-sym" id="resultSym0"></span>
+      <div class="result-amount" id="resultAmount0">—</div>
+      <div class="rate-info" id="rateInfo0"></div>
     </div>
     <div class="result-divider"></div>
-    <div class="result-row" id="resultRowINR">
-      <span class="result-sym">₹</span>
-      <div class="result-amount" id="resultAmountINR">—</div>
-      <div class="rate-info" id="rateInfoINR"></div>
+    <div class="result-row" id="resultSlot1">
+      <span class="result-sym" id="resultSym1"></span>
+      <div class="result-amount" id="resultAmount1">—</div>
+      <div class="rate-info" id="rateInfo1"></div>
     </div>
   </div>
 
@@ -350,17 +383,39 @@
   let ratesBase = "USD";
   let ratesTimestamp = null;
 
-  const BASE_CURRENCY = 'GBP';
-  const TARGET_CURRENCIES = ['USD', 'INR'];
+  const CURRENCIES = ['GBP', 'USD', 'INR'];
+  let baseCurrency = 'GBP';
 
   let ratesLoaded = false;
 
   const amountEl = document.getElementById('amount');
+  const amountLabel = document.getElementById('amountLabel');
+  const amountSymBadge = document.getElementById('amountSymBadge');
+  const currencyTabs = document.getElementById('currencyTabs');
   const resultBox  = document.getElementById('resultBox');
   const errorMsg     = document.getElementById('errorMsg');
   const statusDot    = document.getElementById('statusDot');
   const statusText   = document.getElementById('statusText');
   const timestampEl  = document.getElementById('timestamp');
+
+  // Build base-currency tabs
+  CURRENCIES.forEach(code => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'currency-tab' + (code === baseCurrency ? ' active' : '');
+    btn.textContent = code;
+    btn.dataset.code = code;
+    btn.addEventListener('click', () => {
+      baseCurrency = code;
+      currencyTabs.querySelectorAll('.currency-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.code === code);
+      });
+      amountLabel.textContent = `Amount (${code})`;
+      amountSymBadge.textContent = SYMBOLS[code] || code;
+      if (ratesLoaded) doConvert();
+    });
+    currencyTabs.appendChild(btn);
+  });
 
   // Fetch rates
   async function fetchRates() {
@@ -407,23 +462,26 @@
       return;
     }
 
-    if (!rates[BASE_CURRENCY] || TARGET_CURRENCIES.some(c => !rates[c])) {
+    const targetCurrencies = CURRENCIES.filter(c => c !== baseCurrency);
+
+    if (!rates[baseCurrency] || targetCurrencies.some(c => !rates[c])) {
       showError('Exchange rate not available.');
       return;
     }
 
-    const inUSD = amount / rates[BASE_CURRENCY];
+    const inUSD = amount / rates[baseCurrency];
 
-    TARGET_CURRENCIES.forEach(to => {
+    targetCurrencies.forEach((to, idx) => {
       const converted = inUSD * rates[to];
       const formatter = new Intl.NumberFormat('en-US', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 4
       });
       const symTo = SYMBOLS[to] || to;
-      document.getElementById(`resultAmount${to}`).textContent = `${symTo}${formatter.format(converted)}`;
-      const rate = rates[to] / rates[BASE_CURRENCY];
-      document.getElementById(`rateInfo${to}`).textContent = `1 ${BASE_CURRENCY} = ${symTo}${rate.toFixed(2)}`;
+      document.getElementById(`resultSym${idx}`).textContent = symTo;
+      document.getElementById(`resultAmount${idx}`).textContent = `${symTo}${formatter.format(converted)}`;
+      const rate = rates[to] / rates[baseCurrency];
+      document.getElementById(`rateInfo${idx}`).textContent = `1 ${baseCurrency} = ${symTo}${rate.toFixed(2)}`;
     });
 
     resultBox.classList.remove('visible');
