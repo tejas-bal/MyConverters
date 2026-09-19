@@ -152,36 +152,6 @@
     input[type="number"]::placeholder { color: var(--text-light); }
     select option { background: #fff; color: var(--text-dark); }
 
-    .row {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 10px;
-      align-items: end;
-      margin-bottom: 16px;
-    }
-
-    .swap-btn {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: var(--green-lt);
-      border: 1.5px solid #b6dcc2;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 17px;
-      color: var(--green-dk);
-      transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), background 0.2s, box-shadow 0.2s;
-      margin-bottom: 2px;
-    }
-
-    .swap-btn:hover {
-      transform: rotate(180deg);
-      background: #d4edda;
-      box-shadow: 0 4px 12px rgba(30,92,52,0.15);
-    }
-
     .convert-btn {
       width: 100%;
       padding: 15px;
@@ -228,12 +198,6 @@
       letter-spacing: -1px;
     }
 
-    .result-label {
-      font-size: 13px;
-      color: var(--text-mid);
-      margin-top: 6px;
-    }
-
     .rate-info {
       margin-top: 10px;
       font-size: 12px;
@@ -253,44 +217,10 @@
       display: none;
     }
 
-    .popular-pairs {
-      margin-top: 26px;
-      padding-top: 22px;
-      border-top: 1px solid var(--border);
-    }
-
-    .popular-pairs h4 {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1.1px;
-      color: var(--earth-warm);
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-
-    .pairs-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .pair-chip {
-      padding: 7px 14px;
-      border-radius: 20px;
-      border: 1.5px solid var(--border);
-      background: var(--cream);
-      font-size: 12.5px;
-      color: var(--text-mid);
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: inherit;
-      white-space: nowrap;
-    }
-
-    .pair-chip:hover {
-      border-color: var(--green-md);
-      background: var(--green-lt);
-      color: var(--green-dk);
+    .result-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
     }
 
     .timestamp {
@@ -341,7 +271,8 @@
       text-align: center;
       line-height: 1;
     }
-    .select-wrap select {
+    .select-wrap select,
+    .select-wrap input {
       padding-left: 44px;
     }
 
@@ -369,20 +300,7 @@
       color: var(--green-dk);
       letter-spacing: -1px;
     }
-    .result-chips {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 10px;
-    }
-    .result-from-sym, .result-to-sym {
-      font-size: 22px;
-      font-weight: 800;
-    }
-    .result-from-sym { color: var(--earth-warm); }
-    .result-to-sym   { color: var(--green-dk); }
-    .result-arrow    { font-size: 18px; color: var(--text-light); }
+    .result-row .result-sym { margin-bottom: 2px; }
   </style>
 </head>
 <body>
@@ -402,30 +320,12 @@
     <span id="statusText">Fetching live rates…</span>
   </div>
 
-  <!-- Amount Input -->
+  <!-- Amount Input (GBP) -->
   <div class="field-group">
-    <label>Amount</label>
-    <input type="number" id="amount" placeholder="Enter amount" value="1" min="0" step="any" />
-  </div>
-
-  <!-- From / Swap / To -->
-  <div class="row">
-    <div class="field-group" style="margin-bottom:0">
-      <label>From</label>
-      <div class="select-wrap">
-        <span class="sym-badge" id="fromSymBadge">£</span>
-        <select id="fromCurrency"></select>
-      </div>
-    </div>
-
-    <button class="swap-btn" id="swapBtn" title="Swap currencies">⇄</button>
-
-    <div class="field-group" style="margin-bottom:0">
-      <label>To</label>
-      <div class="select-wrap">
-        <span class="sym-badge" id="toSymBadge">$</span>
-        <select id="toCurrency"></select>
-      </div>
+    <label>Amount (GBP)</label>
+    <div class="select-wrap">
+      <span class="sym-badge">£</span>
+      <input type="number" id="amount" placeholder="Enter amount" value="1" min="0" step="any" />
     </div>
   </div>
 
@@ -434,34 +334,16 @@
   <div class="error-msg" id="errorMsg"></div>
 
   <div class="result-box" id="resultBox">
-    <div class="result-chips">
-      <span class="result-from-sym" id="resultFromSym">£</span>
-      <span class="result-arrow">→</span>
-      <span class="result-to-sym" id="resultToSym">$</span>
+    <div class="result-row" id="resultRowUSD">
+      <span class="result-sym">$</span>
+      <div class="result-amount" id="resultAmountUSD">—</div>
+      <div class="rate-info" id="rateInfoUSD"></div>
     </div>
-    <div class="result-amount" id="resultAmount">—</div>
-    <div class="result-label" id="resultLabel"></div>
-    <div class="rate-info" id="rateInfo"></div>
-  </div>
-
-  <!-- Popular Pairs -->
-  <div class="popular-pairs">
-    <h4>⚡ Quick Pairs</h4>
-    <div class="pairs-grid">
-      <div class="pair-chip" data-from="USD" data-to="EUR">🇺🇸 USA → 🇪🇺 Europe</div>
-      <div class="pair-chip" data-from="USD" data-to="GBP">🇺🇸 USA → 🇬🇧 UK</div>
-      <div class="pair-chip" data-from="USD" data-to="JPY">🇺🇸 USA → 🇯🇵 Japan</div>
-      <div class="pair-chip" data-from="USD" data-to="INR">🇺🇸 USA → 🇮🇳 India</div>
-      <div class="pair-chip" data-from="EUR" data-to="INR">🇪🇺 Europe → 🇮🇳 India</div>
-      <div class="pair-chip" data-from="GBP" data-to="USD">🇬🇧 UK → 🇺🇸 USA</div>
-      <div class="pair-chip" data-from="USD" data-to="CAD">🇺🇸 USA → 🇨🇦 Canada</div>
-      <div class="pair-chip" data-from="AUD" data-to="USD">🇦🇺 Australia → 🇺🇸 USA</div>
-      <div class="pair-chip" data-from="USD" data-to="KRW">🇺🇸 USA → 🇰🇷 S. Korea</div>
-      <div class="pair-chip" data-from="USD" data-to="BRL">🇺🇸 USA → 🇧🇷 Brazil</div>
-      <div class="pair-chip" data-from="USD" data-to="CNY">🇺🇸 USA → 🇨🇳 China</div>
-      <div class="pair-chip" data-from="USD" data-to="AED">🇺🇸 USA → 🇦🇪 UAE</div>
-      <div class="pair-chip" data-from="EUR" data-to="GBP">🇪🇺 Europe → 🇬🇧 UK</div>
-      <div class="pair-chip" data-from="INR" data-to="USD">🇮🇳 India → 🇺🇸 USA</div>
+    <div class="result-divider"></div>
+    <div class="result-row" id="resultRowINR">
+      <span class="result-sym">₹</span>
+      <div class="result-amount" id="resultAmountINR">—</div>
+      <div class="rate-info" id="rateInfoINR"></div>
     </div>
   </div>
 
@@ -469,56 +351,6 @@
 </div>
 
 <script>
-  const CURRENCIES = {
-    USD: "🇺🇸 US Dollar",
-    EUR: "🇪🇺 Euro",
-    GBP: "🇬🇧 British Pound",
-    JPY: "🇯🇵 Japanese Yen",
-    CAD: "🇨🇦 Canadian Dollar",
-    AUD: "🇦🇺 Australian Dollar",
-    CHF: "🇨🇭 Swiss Franc",
-    CNY: "🇨🇳 Chinese Yuan",
-    INR: "🇮🇳 Indian Rupee",
-    MXN: "🇲🇽 Mexican Peso",
-    BRL: "🇧🇷 Brazilian Real",
-    KRW: "🇰🇷 South Korean Won",
-    SGD: "🇸🇬 Singapore Dollar",
-    HKD: "🇭🇰 Hong Kong Dollar",
-    NOK: "🇳🇴 Norwegian Krone",
-    SEK: "🇸🇪 Swedish Krona",
-    DKK: "🇩🇰 Danish Krone",
-    NZD: "🇳🇿 New Zealand Dollar",
-    ZAR: "🇿🇦 South African Rand",
-    AED: "🇦🇪 UAE Dirham",
-    SAR: "🇸🇦 Saudi Riyal",
-    THB: "🇹🇭 Thai Baht",
-    MYR: "🇲🇾 Malaysian Ringgit",
-    IDR: "🇮🇩 Indonesian Rupiah",
-    PHP: "🇵🇭 Philippine Peso",
-    PLN: "🇵🇱 Polish Zloty",
-    CZK: "🇨🇿 Czech Koruna",
-    HUF: "🇭🇺 Hungarian Forint",
-    TRY: "🇹🇷 Turkish Lira",
-    RUB: "🇷🇺 Russian Ruble",
-    EGP: "🇪🇬 Egyptian Pound",
-    PKR: "🇵🇰 Pakistani Rupee",
-    BDT: "🇧🇩 Bangladeshi Taka",
-    VND: "🇻🇳 Vietnamese Dong",
-    NGN: "🇳🇬 Nigerian Naira",
-    KES: "🇰🇪 Kenyan Shilling",
-    GHS: "🇬🇭 Ghanaian Cedi",
-    CLP: "🇨🇱 Chilean Peso",
-    COP: "🇨🇴 Colombian Peso",
-    PEN: "🇵🇪 Peruvian Sol",
-    ILS: "🇮🇱 Israeli Shekel",
-    QAR: "🇶🇦 Qatari Riyal",
-    KWD: "🇰🇼 Kuwaiti Dinar",
-    BHD: "🇧🇭 Bahraini Dinar",
-    OMR: "🇴🇲 Omani Rial",
-    RON: "🇷🇴 Romanian Leu",
-    UAH: "🇺🇦 Ukrainian Hryvnia",
-  };
-
   const SYMBOLS = {
     USD:"$", EUR:"€", GBP:"£", JPY:"¥", CAD:"CA$", AUD:"A$", CHF:"Fr",
     CNY:"¥", INR:"₹", MXN:"MX$", BRL:"R$", KRW:"₩", SGD:"S$", HKD:"HK$",
@@ -547,42 +379,16 @@
   let ratesBase = "USD";
   let ratesTimestamp = null;
 
-  const fromSel  = document.getElementById('fromCurrency');
-  const toSel    = document.getElementById('toCurrency');
+  const BASE_CURRENCY = 'GBP';
+  const TARGET_CURRENCIES = ['USD', 'INR'];
+
   const amountEl = document.getElementById('amount');
   const convertBtn = document.getElementById('convertBtn');
   const resultBox  = document.getElementById('resultBox');
-  const resultAmount = document.getElementById('resultAmount');
-  const resultLabel  = document.getElementById('resultLabel');
-  const rateInfo     = document.getElementById('rateInfo');
   const errorMsg     = document.getElementById('errorMsg');
   const statusDot    = document.getElementById('statusDot');
   const statusText   = document.getElementById('statusText');
   const timestampEl  = document.getElementById('timestamp');
-  const fromSymBadge = document.getElementById('fromSymBadge');
-  const toSymBadge   = document.getElementById('toSymBadge');
-  const resultFromSym = document.getElementById('resultFromSym');
-  const resultToSym   = document.getElementById('resultToSym');
-
-  function updateBadges() {
-    fromSymBadge.textContent = SYMBOLS[fromSel.value] || fromSel.value;
-    toSymBadge.textContent   = SYMBOLS[toSel.value]   || toSel.value;
-  }
-
-  // Populate selects
-  Object.entries(CURRENCIES).forEach(([code, name]) => {
-    [fromSel, toSel].forEach(sel => {
-      const opt = document.createElement('option');
-      opt.value = code;
-      const sym = SYMBOLS[code] ? ` (${SYMBOLS[code]})` : '';
-      opt.textContent = `${code}${sym} – ${name.replace(/^.+? /, '')}`;
-      sel.appendChild(opt);
-    });
-  });
-
-  fromSel.value = 'GBP';
-  toSel.value   = 'USD';
-  updateBadges();
 
   // Fetch rates
   async function fetchRates() {
@@ -622,8 +428,6 @@
   function doConvert() {
     hideError();
     const amount = parseFloat(amountEl.value);
-    const from = fromSel.value;
-    const to = toSel.value;
 
     if (isNaN(amount) || amount < 0) {
       showError('Please enter a valid positive amount.');
@@ -631,28 +435,24 @@
       return;
     }
 
-    if (!rates[from] || !rates[to]) {
-      showError('Exchange rate not available for selected currency.');
+    if (!rates[BASE_CURRENCY] || TARGET_CURRENCIES.some(c => !rates[c])) {
+      showError('Exchange rate not available.');
       return;
     }
 
-    // Convert: amount (from) → USD → to
-    const inUSD = amount / rates[from];
-    const converted = inUSD * rates[to];
+    const inUSD = amount / rates[BASE_CURRENCY];
 
-    const formatter = new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: ['JPY','KRW','VND','IDR','CLP','HUF'].includes(to) ? 0 : 4
+    TARGET_CURRENCIES.forEach(to => {
+      const converted = inUSD * rates[to];
+      const formatter = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 4
+      });
+      const symTo = SYMBOLS[to] || to;
+      document.getElementById(`resultAmount${to}`).textContent = `${symTo}${formatter.format(converted)}`;
+      const rate = rates[to] / rates[BASE_CURRENCY];
+      document.getElementById(`rateInfo${to}`).textContent = `1 ${BASE_CURRENCY} = ${symTo}${rate.toFixed(6)} ${to}`;
     });
-
-    const symTo   = SYMBOLS[to]   || to;
-    const symFrom = SYMBOLS[from] || from;
-    resultAmount.textContent = `${symTo}${formatter.format(converted)}`;
-    resultLabel.textContent = `${symFrom}${formatter.format(amount)} ${from} equals`;
-    resultFromSym.textContent = symFrom;
-    resultToSym.textContent   = symTo;
-    const rate = rates[to] / rates[from];
-    rateInfo.textContent = `1 ${from} = ${symTo}${rate.toFixed(6)} ${to}`;
 
     resultBox.classList.remove('visible');
     void resultBox.offsetWidth; // reflow for animation
@@ -663,30 +463,9 @@
 
   // Auto-convert on input change
   amountEl.addEventListener('input', () => { if (!convertBtn.disabled) doConvert(); });
-  fromSel.addEventListener('change', () => { updateBadges(); if (!convertBtn.disabled) doConvert(); });
-  toSel.addEventListener('change',   () => { updateBadges(); if (!convertBtn.disabled) doConvert(); });
 
   // Enter key
   amountEl.addEventListener('keydown', e => { if (e.key === 'Enter' && !convertBtn.disabled) doConvert(); });
-
-  // Swap
-  document.getElementById('swapBtn').addEventListener('click', () => {
-    const tmp = fromSel.value;
-    fromSel.value = toSel.value;
-    toSel.value = tmp;
-    updateBadges();
-    if (!convertBtn.disabled) doConvert();
-  });
-
-  // Quick pair chips
-  document.querySelectorAll('.pair-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      fromSel.value = chip.dataset.from;
-      toSel.value   = chip.dataset.to;
-      amountEl.value = 1;
-      if (!convertBtn.disabled) doConvert();
-    });
-  });
 
   fetchRates();
 </script>
