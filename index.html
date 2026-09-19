@@ -9,26 +9,22 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --cream:    #f0e8d5;
+      --black:    #161616;
+      --ink:      #1f1f1f;
+      --gray-700: #595959;
+      --gray-500: #8c8c8c;
+      --gray-300: #d6d6d6;
+      --gray-200: #e6e6e6;
+      --gray-100: #f3f3f3;
       --white:    #ffffff;
-      --green-dk: #1e5c34;
-      --green-md: #2d7a47;
-      --green-lt: #e8f5ec;
-      --green-accent: #34a853;
-      --earth-tan:  #c8b89a;
-      --earth-warm: #7a6652;
-      --text-dark:  #1a2e1e;
-      --text-mid:   #4a5c4e;
-      --text-light: #7a8c7e;
-      --border:     #d6cfc4;
-      --shadow:     0 4px 24px rgba(30,92,52,0.10);
-      --shadow-lg:  0 12px 40px rgba(30,92,52,0.14);
+      --border:   #dcdcdc;
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.10);
     }
 
     body {
       font-family: 'Google Sans Text', 'Google Sans', 'Segoe UI', system-ui, sans-serif;
       min-height: 100vh;
-      background-color: #e0e0e0;
+      background-color: #eaeaea;
       display: flex;
       align-items: flex-start;
       justify-content: center;
@@ -37,33 +33,33 @@
 
     .card {
       background: var(--white);
-      border-radius: 22px;
-      padding: 22px 24px;
+      border-radius: 18px;
+      padding: 24px 26px;
       width: 100%;
       max-width: 460px;
       margin-top: 8px;
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--border);
-      color: var(--text-dark);
+      color: var(--ink);
     }
 
     .header {
       text-align: center;
-      margin-bottom: 12px;
-    }
-
-    .header .icon {
-      font-size: 22px;
-      margin-bottom: 2px;
-      display: block;
+      margin-bottom: 14px;
     }
 
     .header h1 {
       font-family: 'Google Sans', system-ui, sans-serif;
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 700;
-      color: var(--green-dk);
+      color: var(--black);
       letter-spacing: -0.3px;
+    }
+
+    .header p {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-top: 3px;
     }
 
     .status-bar {
@@ -72,9 +68,10 @@
       justify-content: center;
       gap: 7px;
       font-size: 11px;
-      color: var(--text-light);
+      color: var(--gray-700);
       margin-bottom: 16px;
-      background: var(--green-lt);
+      background: var(--gray-100);
+      border: 1px solid var(--gray-200);
       border-radius: 20px;
       padding: 5px 12px;
       width: fit-content;
@@ -86,25 +83,17 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: var(--green-accent);
-      animation: pulse 2s infinite;
+      background: var(--black);
       flex-shrink: 0;
     }
 
     .status-dot.loading {
+      background: var(--gray-300);
+    }
+    .status-dot.error {
       background: transparent;
-      border: 2px solid var(--earth-tan);
-      border-top-color: var(--green-md);
-      animation: spin 0.8s linear infinite;
-      width: 8px; height: 8px;
+      border: 1.5px solid var(--black);
     }
-    .status-dot.error { background: #e53935; animation: none; }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.35; }
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
 
     .field-group {
       display: flex;
@@ -118,7 +107,7 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 1.1px;
-      color: var(--earth-warm);
+      color: var(--gray-700);
     }
 
     input[type="number"], select {
@@ -126,23 +115,23 @@
       padding: 10px 13px;
       border-radius: 12px;
       border: 1.5px solid var(--border);
-      background: var(--cream);
-      color: var(--text-dark);
+      background: var(--gray-100);
+      color: var(--ink);
       font-size: 15px;
       font-family: inherit;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
       appearance: auto;
     }
 
     input[type="number"]:focus, select:focus {
-      border-color: var(--green-md);
+      border-color: var(--black);
       background: var(--white);
-      box-shadow: 0 0 0 3px rgba(52,168,83,0.12);
+      box-shadow: 0 0 0 3px rgba(22,22,22,0.08);
     }
 
-    input[type="number"]::placeholder { color: var(--text-light); }
-    select option { background: #fff; color: var(--text-dark); }
+    input[type="number"]::placeholder { color: var(--gray-500); }
+    select option { background: #fff; color: var(--ink); }
 
     .currency-tabs {
       display: flex;
@@ -154,29 +143,29 @@
       padding: 9px 0;
       border-radius: 20px;
       border: 1.5px solid var(--border);
-      background: var(--cream);
-      color: var(--text-dark);
+      background: var(--gray-100);
+      color: var(--ink);
       font-family: inherit;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
     }
 
-    .currency-tab:hover:not(.active) { border-color: var(--green-md); }
+    .currency-tab:hover:not(.active) { border-color: var(--black); }
 
     .currency-tab.active {
-      background: var(--green-dk);
+      background: var(--black);
       color: #fff;
-      border-color: var(--green-dk);
+      border-color: var(--black);
     }
 
     .result-box {
       margin-top: 16px;
       padding: 16px 8px;
       border-radius: 16px;
-      background: var(--green-lt);
-      border: 1.5px solid #b6dcc2;
+      background: var(--gray-100);
+      border: 1.5px solid var(--gray-200);
       text-align: center;
       display: none;
       align-items: stretch;
@@ -184,27 +173,22 @@
       gap: 8px;
     }
 
-    .result-box.visible { display: flex; animation: fadeSlideIn 0.35s ease; }
-
-    @keyframes fadeSlideIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .result-box.visible { display: flex; }
 
     .rate-info {
       margin-top: 6px;
       font-size: 10px;
-      color: var(--text-light);
+      color: var(--gray-500);
       font-style: italic;
     }
 
     .error-msg {
       margin-top: 12px;
       padding: 10px 14px;
-      border-radius: 10px;
-      background: #fff3f2;
-      border: 1px solid #f5c6c4;
-      color: #c0392b;
+      border-radius: 8px;
+      background: var(--gray-100);
+      border-left: 3px solid var(--black);
+      color: var(--ink);
       font-size: 13px;
       text-align: center;
       display: none;
@@ -213,7 +197,7 @@
     .result-divider {
       width: 1px;
       align-self: stretch;
-      background: var(--border);
+      background: var(--gray-300);
     }
 
     .result-row {
@@ -224,7 +208,7 @@
     .timestamp {
       text-align: center;
       font-size: 10px;
-      color: var(--text-light);
+      color: var(--gray-500);
       margin-top: 12px;
     }
 
@@ -241,7 +225,7 @@
       transform: translateY(-50%);
       font-size: 18px;
       font-weight: 700;
-      color: var(--green-dk);
+      color: var(--black);
       pointer-events: none;
       width: 26px;
       text-align: center;
@@ -252,19 +236,10 @@
       padding-left: 44px;
     }
 
-    /* Fun result bounce */
-    @keyframes bounceIn {
-      0%   { opacity: 0; transform: scale(0.7) translateY(12px); }
-      60%  { transform: scale(1.06) translateY(-3px); }
-      80%  { transform: scale(0.97); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    .result-box.visible { display: flex; animation: bounceIn 0.45s cubic-bezier(.34,1.56,.64,1); }
-
     .result-sym {
       font-size: 19px;
       font-weight: 800;
-      color: var(--green-accent);
+      color: var(--black);
       line-height: 1;
       margin-bottom: 2px;
       display: block;
@@ -273,7 +248,7 @@
       font-family: 'Google Sans', system-ui, sans-serif;
       font-size: 15px;
       font-weight: 700;
-      color: var(--green-dk);
+      color: var(--black);
       letter-spacing: -0.3px;
       word-break: break-word;
     }
@@ -283,8 +258,8 @@
 
 <div class="card">
   <div class="header">
-    <div class="icon">🌍💸</div>
     <h1>Currency Converter</h1>
+    <p>Real-time exchange rates</p>
   </div>
 
   <div class="status-bar">
@@ -448,8 +423,6 @@
       document.getElementById(`rateInfo${idx}`).textContent = `1 ${baseCurrency} = ${symTo}${rate.toFixed(2)}`;
     });
 
-    resultBox.classList.remove('visible');
-    void resultBox.offsetWidth; // reflow for animation
     resultBox.classList.add('visible');
   }
 
