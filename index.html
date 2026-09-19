@@ -33,17 +33,18 @@
         radial-gradient(ellipse at 10% 20%, rgba(52,168,83,0.07) 0%, transparent 55%),
         radial-gradient(ellipse at 90% 80%, rgba(180,150,100,0.10) 0%, transparent 55%);
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       padding: 20px;
     }
 
     .card {
       background: var(--white);
-      border-radius: 28px;
-      padding: 44px 40px;
+      border-radius: 22px;
+      padding: 22px 24px;
       width: 100%;
-      max-width: 520px;
+      max-width: 460px;
+      margin-top: 32px;
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--border);
       color: var(--text-dark);
@@ -51,27 +52,21 @@
 
     .header {
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 12px;
     }
 
     .header .icon {
-      font-size: 40px;
-      margin-bottom: 12px;
+      font-size: 22px;
+      margin-bottom: 2px;
       display: block;
     }
 
     .header h1 {
       font-family: 'Google Sans', system-ui, sans-serif;
-      font-size: 26px;
+      font-size: 17px;
       font-weight: 700;
       color: var(--green-dk);
       letter-spacing: -0.3px;
-    }
-
-    .header p {
-      font-size: 13px;
-      color: var(--text-light);
-      margin-top: 5px;
     }
 
     .status-bar {
@@ -79,12 +74,12 @@
       align-items: center;
       justify-content: center;
       gap: 7px;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-light);
-      margin-bottom: 28px;
+      margin-bottom: 16px;
       background: var(--green-lt);
       border-radius: 20px;
-      padding: 7px 14px;
+      padding: 5px 12px;
       width: fit-content;
       margin-left: auto;
       margin-right: auto;
@@ -117,8 +112,8 @@
     .field-group {
       display: flex;
       flex-direction: column;
-      gap: 7px;
-      margin-bottom: 16px;
+      gap: 5px;
+      margin-bottom: 12px;
     }
 
     label {
@@ -131,7 +126,7 @@
 
     input[type="number"], select {
       width: 100%;
-      padding: 13px 15px;
+      padding: 10px 13px;
       border-radius: 12px;
       border: 1.5px solid var(--border);
       background: var(--cream);
@@ -154,16 +149,16 @@
 
     .convert-btn {
       width: 100%;
-      padding: 15px;
+      padding: 12px;
       border-radius: 50px;
       border: none;
       background: var(--green-dk);
       color: #fff;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       font-family: inherit;
       cursor: pointer;
-      margin-top: 8px;
+      margin-top: 4px;
       letter-spacing: 0.3px;
       transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
       box-shadow: 0 4px 16px rgba(30,92,52,0.25);
@@ -174,9 +169,9 @@
     .convert-btn:disabled { background: #b0c4b5; cursor: not-allowed; transform: none; box-shadow: none; }
 
     .result-box {
-      margin-top: 28px;
-      padding: 26px 24px;
-      border-radius: 20px;
+      margin-top: 16px;
+      padding: 16px 20px;
+      border-radius: 16px;
       background: var(--green-lt);
       border: 1.5px solid #b6dcc2;
       text-align: center;
@@ -190,24 +185,16 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .result-amount {
-      font-family: 'Google Sans', system-ui, sans-serif;
-      font-size: 38px;
-      font-weight: 700;
-      color: var(--green-dk);
-      letter-spacing: -1px;
-    }
-
     .rate-info {
-      margin-top: 10px;
-      font-size: 12px;
+      margin-top: 6px;
+      font-size: 11px;
       color: var(--text-light);
       font-style: italic;
     }
 
     .error-msg {
-      margin-top: 16px;
-      padding: 12px 16px;
+      margin-top: 12px;
+      padding: 10px 14px;
       border-radius: 10px;
       background: #fff3f2;
       border: 1px solid #f5c6c4;
@@ -220,14 +207,14 @@
     .result-divider {
       height: 1px;
       background: var(--border);
-      margin: 20px 0;
+      margin: 12px 0;
     }
 
     .timestamp {
       text-align: center;
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-light);
-      margin-top: 20px;
+      margin-top: 12px;
     }
 
     /* Floating symbols background */
@@ -286,21 +273,20 @@
     .result-box.visible { display: block; animation: bounceIn 0.45s cubic-bezier(.34,1.56,.64,1); }
 
     .result-sym {
-      font-size: 42px;
+      font-size: 26px;
       font-weight: 800;
       color: var(--green-accent);
       line-height: 1;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
       display: block;
     }
     .result-amount {
       font-family: 'Google Sans', system-ui, sans-serif;
-      font-size: 36px;
+      font-size: 24px;
       font-weight: 700;
       color: var(--green-dk);
-      letter-spacing: -1px;
+      letter-spacing: -0.5px;
     }
-    .result-row .result-sym { margin-bottom: 2px; }
   </style>
 </head>
 <body>
@@ -312,7 +298,6 @@
   <div class="header">
     <div class="icon">🌍💸</div>
     <h1>Currency Converter</h1>
-    <p>Live exchange rates · Updated in real-time</p>
   </div>
 
   <div class="status-bar">
