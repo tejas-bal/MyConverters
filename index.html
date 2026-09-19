@@ -176,7 +176,7 @@
 
     .result-box {
       margin-top: 16px;
-      padding: 16px 12px;
+      padding: 16px 8px;
       border-radius: 16px;
       background: var(--green-lt);
       border: 1.5px solid #b6dcc2;
@@ -184,7 +184,7 @@
       display: none;
       align-items: stretch;
       justify-content: center;
-      gap: 12px;
+      gap: 8px;
     }
 
     .result-box.visible { display: flex; animation: fadeSlideIn 0.35s ease; }
@@ -196,7 +196,7 @@
 
     .rate-info {
       margin-top: 6px;
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-light);
       font-style: italic;
     }
@@ -287,7 +287,7 @@
     .result-box.visible { display: flex; animation: bounceIn 0.45s cubic-bezier(.34,1.56,.64,1); }
 
     .result-sym {
-      font-size: 22px;
+      font-size: 19px;
       font-weight: 800;
       color: var(--green-accent);
       line-height: 1;
@@ -296,10 +296,10 @@
     }
     .result-amount {
       font-family: 'Google Sans', system-ui, sans-serif;
-      font-size: 18px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--green-dk);
-      letter-spacing: -0.5px;
+      letter-spacing: -0.3px;
       word-break: break-word;
     }
   </style>
@@ -349,6 +349,12 @@
       <div class="result-amount" id="resultAmount1">—</div>
       <div class="rate-info" id="rateInfo1"></div>
     </div>
+    <div class="result-divider"></div>
+    <div class="result-row" id="resultSlot2">
+      <span class="result-sym" id="resultSym2"></span>
+      <div class="result-amount" id="resultAmount2">—</div>
+      <div class="rate-info" id="rateInfo2"></div>
+    </div>
   </div>
 
   <div class="timestamp" id="timestamp"></div>
@@ -383,7 +389,7 @@
   let ratesBase = "USD";
   let ratesTimestamp = null;
 
-  const CURRENCIES = ['GBP', 'USD', 'INR'];
+  const CURRENCIES = ['GBP', 'USD', 'INR', 'EUR'];
   let baseCurrency = 'GBP';
 
   let ratesLoaded = false;
@@ -475,7 +481,7 @@
       const converted = inUSD * rates[to];
       const formatter = new Intl.NumberFormat('en-US', {
         minimumFractionDigits: 2,
-        maximumFractionDigits: 4
+        maximumFractionDigits: 2
       });
       const symTo = SYMBOLS[to] || to;
       document.getElementById(`resultSym${idx}`).textContent = symTo;
