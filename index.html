@@ -288,7 +288,7 @@
     <label id="amountLabel">Amount (GBP)</label>
     <div class="select-wrap">
       <span class="sym-badge" id="amountSymBadge">£</span>
-      <input type="number" id="amount" placeholder="Enter amount" value="1" min="0" step="any" />
+      <input type="number" id="amount" placeholder="Enter amount" min="0" step="any" />
     </div>
   </div>
 
@@ -403,6 +403,12 @@
 
   function doConvert() {
     hideError();
+
+    if (amountEl.value.trim() === '') {
+      resultBox.classList.remove('visible');
+      return;
+    }
+
     const amount = parseFloat(amountEl.value);
 
     if (isNaN(amount) || amount < 0) {
@@ -438,6 +444,9 @@
 
   // Auto-convert on input change
   amountEl.addEventListener('input', () => { if (ratesLoaded) doConvert(); });
+
+  // Select existing text on focus so typing replaces it instead of appending
+  amountEl.addEventListener('focus', () => amountEl.select());
 
   fetchRates();
 </script>
